@@ -1,0 +1,25 @@
+{
+  "name": "topgg-votes",
+  "version": "1.1.0",
+  "description": "Easily trade all your votes with this super easy framework!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DotwoodMedia/topgg-votes.git"
+  },
+  "keywords": ["topgg", "framework", "votes"],
+  "author": "Dotwood Media",
+  "license": "Apache License",
+  "bugs": {
+    "url": "https://github.com/DotwoodMedia/topgg-votes/issues"
+  },
+  "homepage": "https://github.com/DotwoodMedia/topgg-votes#readme",
+  "dependencies": {
+    "@top-gg/sdk": "^3.1.1",
+    "chalk": "^4.1.1",
+    "express": "^4.17.1"
+  }
+}
