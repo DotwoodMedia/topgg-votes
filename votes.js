@@ -22,12 +22,22 @@ class Topgg {
         const webhook = new topSdk.Webhook(this.settings.auth);
 
         app.post("/dblwebhook", webhook.middleware(), async (req, res) => {
-            const user = req.vote.user;
-            const bot = req.vote.bot;
-            const type = req.vote.type;
-            const isWeekend = req.vote.isWeekend;
+            if (req.vote.guild) {
+                const user = req.vote.user;
+                const guild = req.vote.guild;
+                const isWeekend = req.vote.isWeekend;
+                const query = "server";
 
-            client.emit('newVote', user, bot, type, isWeekend);
+                client.emit('newVote', user, guild, isWeekend, query);
+            }
+            else if (req.vote.bot) {
+                const user = req.vote.user;
+                const bot = req.vote.bot;
+                const isWeekend = req.vote.isWeekend;
+                const query = "bot";
+
+                client.emit('newVote', user, bot, isWeekend, query);
+            }
         });
         app.listen(this.settings.port);
     }

@@ -20,8 +20,7 @@ client.topgg = new Topgg({
 client.topgg.postWebhook(client);
 
 // Event for vote notifications
-// Options: user, bot, type, isWeekend
-client.on("newVote", user => {
+client.on("newVote", (user, bot, isWeekend, query) => {
     console.log(`${user} has voted!`)
 })
 ```
@@ -42,13 +41,24 @@ client.topgg.checkVote(message.author.id).then(vote => {
 # 📂 Examples
 - New vote event
 ```
-client.on("newVote", (user, bot, isWeekend) => {
-    let embed = new Discord.MessageEmbed()
-        .setTitle(`New vote!!`)
-        .addField("User", `<@!${user}>`, true)
-        .addField("Bot", `<@!${bot}>`, true)
-        .addField("Weekend", isWeekend, true)
-    client.channels.cache.get(ID).send(embed);
+client.on("newVote", (user, bot, isWeekend, query) => {
+    if (query == "bot") {
+        let embed = new Discord.MessageEmbed()
+            .setTitle(`New bot vote!!`)
+            .addField("User", `<@!${user}>`, true)
+            .addField("Bot", `<@!${bot}>`, true)
+            .addField("Weekend", isWeekend, true)
+        client.channels.cache.get(ID).send(embed);
+        // Enter the ID of the logs channel at ID
+    }
+    else if (query == "server") {
+        let embed = new Discord.MessageEmbed()
+            .setTitle(`New server vote!!`)
+            .addField("User", `<@!${user}>`, true)
+            .addField("Server", `${bot}`, true)
+        client.channels.cache.get(ID).send(embed);
+        // Enter the ID of the logs channel at ID
+    }
 })
 ```
 
