@@ -1,1 +1,0 @@
-exports.Topgg = require('./votes');

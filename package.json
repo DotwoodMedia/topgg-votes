@@ -4,13 +4,23 @@
   "description": "Easily trade all your votes with this super easy framework!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
+  "files": [
+    "lib/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DotwoodMedia/topgg-votes.git"
   },
-  "keywords": ["topgg", "framework", "votes"],
+  "keywords": [
+    "topgg",
+    "framework",
+    "votes"
+  ],
   "author": "Dotwood Media",
   "license": "Apache License",
   "bugs": {
@@ -18,8 +28,13 @@
   },
   "homepage": "https://docs.dotwood.media/other-packages/top.gg-votes",
   "dependencies": {
-    "@top-gg/sdk": "^3.1.1",
-    "chalk": "^4.1.1",
-    "express": "^4.17.1"
+    "@top-gg/sdk": "^3.1.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^4.9.3"
   }
 }
