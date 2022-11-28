@@ -15,11 +15,11 @@ export class VoteClient extends EventEmitter {
   private _port: number;
   private _authorization: string;
 
-  constructor(config: IVoteClientConfig) {
+  constructor(config?: IVoteClientConfig) {
     super();
-    this._authToken = config.token || '';
-    this._port = config.port || 22565;
-    this._authorization = config.authorization || 'WEBHOOK';
+    this._authToken = config?.token || '';
+    this._port = config?.port || 22565;
+    this._authorization = config?.authorization || 'WEBHOOK';
   }
 
   public setToken(token: string): this {
