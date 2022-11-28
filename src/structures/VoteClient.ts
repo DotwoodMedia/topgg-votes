@@ -66,7 +66,7 @@ export class VoteClient extends EventEmitter {
         });
     }
 
-    public async getVotes(): Promise<Array<ShortUser>> {
+    public async getVotes(): Promise<ShortUser[]> {
         if (!this._authToken) throw new Error("[Top.gg Votes] Missing token!");
         const API = new Api(this._authToken);
         const votes = await API.getVotes();
