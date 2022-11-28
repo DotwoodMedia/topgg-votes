@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { Webhook, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
-import { ShortUser } from '@top-gg/sdk/dist/typings';
+import { BotInfo, ShortUser, UserInfo } from '@top-gg/sdk/dist/typings';
 
 export interface IVoteClientConfig {
     token: string;
@@ -71,5 +71,17 @@ export class VoteClient extends EventEmitter {
         const API = new Api(this._authToken);
         const voted = await API.hasVoted(userId);
         return voted;
+    }
+
+    public async getBot(clientId: string): Promise<BotInfo> {
+        const API = new Api(this._authToken);
+        const info = await API.getBot(clientId);
+        return info;
+    }
+
+    public async getUser(userId: string): Promise<UserInfo> {
+        const API = new Api(this._authToken);
+        const info = await API.getUser(userId);
+        return info;
     }
 }
