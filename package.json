@@ -1,6 +1,6 @@
 {
   "name": "topgg-votes",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Easily trade all your votes with this super easy framework!",
   "main": "index.js",
   "scripts": {
