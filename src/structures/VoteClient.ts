@@ -1,5 +1,5 @@
 import * as express from 'express';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { Webhook, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
 import { BotInfo, ShortUser, UserInfo } from '@top-gg/sdk/dist/typings';
