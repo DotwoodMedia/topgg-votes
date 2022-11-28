@@ -1,10 +1,11 @@
 import * as express from 'express';
+import chalk from 'chalk';
 import { Webhook, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
 import { BotInfo, ShortUser, UserInfo } from '@top-gg/sdk/dist/typings';
 
 export interface IVoteClientConfig {
-    token: string;
+    token?: string;
     port?: number;
     authorization?: string;
 }
@@ -16,7 +17,7 @@ export class VoteClient extends EventEmitter {
 
     constructor(config: IVoteClientConfig) {
         super();
-        this._authToken = config.token;
+        this._authToken = config.token || '';
         this._port = config.port || 22565;
         this._authorization = config.authorization || 'WEBHOOK';
     }
@@ -37,6 +38,8 @@ export class VoteClient extends EventEmitter {
     }
 
     public postWebhook() {
+        if (!this._authorization) throw new Error("[Top.gg Votes] Missing authorization!");
+        if (!this._port) throw new Error("[Top.gg Votes] Missing server port!");
         const webhook = new Webhook(this._authorization);
         const app = express();
 
@@ -58,28 +61,37 @@ export class VoteClient extends EventEmitter {
             }
         }))
 
-        app.listen(this._port);
+        app.listen(this._port, () => {
+            console.log(chalk.white(chalk.bold("[Top.gg Votes]")), chalk.green(`Vote client is running on port ${this._port}`))
+        });
     }
 
     public async getVotes(): Promise<Array<ShortUser>> {
+        if (!this._authToken) throw new Error("[Top.gg Votes] Missing token!");
         const API = new Api(this._authToken);
         const votes = await API.getVotes();
         return votes;
     }
 
     public async hasVoted(userId: string): Promise<boolean> {
+        if (!this._authToken) throw new Error("[Top.gg Votes] Missing token!");
+        if (!userId) throw new Error("[Top.gg Votes] Missing user ID!");
         const API = new Api(this._authToken);
         const voted = await API.hasVoted(userId);
         return voted;
     }
 
-    public async getBot(clientId: string): Promise<BotInfo> {
+    public async getBot(botId: string): Promise<BotInfo> {
+        if (!this._authToken) throw new Error("[Top.gg Votes] Missing token!");
+        if (!botId) throw new Error("[Top.gg Votes] Missing bot ID!");
         const API = new Api(this._authToken);
-        const info = await API.getBot(clientId);
+        const info = await API.getBot(botId);
         return info;
     }
 
     public async getUser(userId: string): Promise<UserInfo> {
+        if (!this._authToken) throw new Error("[Top.gg Votes] Missing token!");
+        if (!userId) throw new Error("[Top.gg Votes] Missing user ID!");
         const API = new Api(this._authToken);
         const info = await API.getUser(userId);
         return info;
