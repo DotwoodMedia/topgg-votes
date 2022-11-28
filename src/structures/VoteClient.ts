@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Webhook, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
+import { ShortUser } from '@top-gg/sdk/dist/typings';
 
 export interface IVoteClientConfig {
     token: string;
@@ -58,6 +59,12 @@ export class VoteClient extends EventEmitter {
         }))
 
         app.listen(this._port);
+    }
+
+    public async getVotes(): Promise<Array<ShortUser>> {
+        const API = new Api(this._authToken);
+        const votes = await API.getVotes();
+        return votes;
     }
 
     public async hasVoted(userId: string): Promise<boolean> {
