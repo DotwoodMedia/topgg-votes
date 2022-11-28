@@ -10,10 +10,32 @@ export interface IVoteClientConfig {
   authorization?: string;
 }
 
+export interface BotVoteEvent {
+  userId: string;
+  botId: string;
+  isWeekend?: boolean;
+  type: string;
+}
+
+export interface ServerVoteEvent {
+  userId: string;
+  guildId: string;
+  type: string;
+}
+
+export type IVoteClientEvents = {
+  botVote: ({ userId, botId, isWeekend, type }: BotVoteEvent) => void;
+  serverVote: ({ userId, guildId, type }: ServerVoteEvent) => void;
+}
+
 export class VoteClient extends EventEmitter {
   private _authToken: string;
   private _port: number;
   private _authorization: string;
+  private _untypedOn = this.on;
+  private _untypedEmit = this.emit;
+  public on = <K extends keyof IVoteClientEvents>(event: K, listener: IVoteClientEvents[K]): this => this._untypedOn(event, listener)
+  public emit = <K extends keyof IVoteClientEvents>(event: K, ...args: Parameters<IVoteClientEvents[K]>): boolean => this._untypedEmit(event, ...args)
 
   constructor(config?: IVoteClientConfig) {
     super();
