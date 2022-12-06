@@ -7,59 +7,140 @@ Easily trade all your votes with this super easy framework!
 # 💻 Installation
 
 1. Install module: `npm i topgg-votes`
-2. Put the following in your index.js:
-```
-const { Topgg } = require("topgg-votes");
+2. Put the following in your index.ts:
+```js
+import { VoteClient } from 'topgg-votes'
 
-client.topgg = new Topgg({
-    token: "TOKEN", // Your top.gg token
-    port: 22565, // Your host port
-    auth: "WEBHOOK" // Webhook password
-})
-
-client.topgg.postWebhook(client);
+const votesClient = new VoteClient()
+votesClient.postWebhook();
 
 // Event for vote notifications
-client.on("newVote", (user, bot, isWeekend, query) => {
-    console.log(`${user} has voted!`)
+votesClient.on("botVote", ({ userId }) => {
+    console.log(`${userId} has voted!`)
 })
 ```
 
 # 📨 Check votes
-```
-client.topgg.checkVote(message.author.id).then(vote => {
-    if (vote) {
+```js
+votesClient.hasVoted(interaction.user.id).then(voted => {
+    if (voted) {
         console.log("User has voted!");
     }
 
-    if (!vote) {
+    if (!voted) {
         console.log("User has not voted!");
     }
 })
 ```
 
-# 📂 Examples
-- New vote event
+# 📂 Other examples
+### Change client
+```js
+const votesClient = new VoteClient()
+    .setToken("TOKEN") // Your top.gg token
+    .setPort(22565) // Your host port
+    .setAuthorization("WEBHOOK") // Webhook password
 ```
-client.on("newVote", (user, bot, isWeekend, query) => {
-    if (query == "bot") {
-        let embed = new Discord.MessageEmbed()
-            .setTitle(`New bot vote!!`)
-            .addField("User", `<@!${user}>`, true)
-            .addField("Bot", `<@!${bot}>`, true)
-            .addField("Weekend", isWeekend, true)
-        client.channels.cache.get(ID).send(embed);
-        // Enter the ID of the logs channel at ID
-    }
-    else if (query == "server") {
-        let embed = new Discord.MessageEmbed()
-            .setTitle(`New server vote!!`)
-            .addField("User", `<@!${user}>`, true)
-            .addField("Server", `${bot}`, true)
-        client.channels.cache.get(ID).send(embed);
-        // Enter the ID of the logs channel at ID
-    }
+
+### New bot vote event
+```js
+client.on("botVote", ({ userId, botId, isWeekend, type }) => {
+    let embed = new Discord.EmbedBuilder()
+        .setTitle(`New bot vote!!`)
+        .addFields([
+            {
+                name: 'User',
+                value: `<@!${userId}>`,
+                inline: true
+            },
+            {
+                name: 'Bot',
+                value: `<@!${botId}>`,
+                inline: true
+            },
+            {
+                name: 'Weekend',
+                value: `${isWeekend}`,
+                inline: true
+            },
+            {
+                name: 'Type',
+                value: `${type}`,
+                inline: true
+            }
+        ])
+    client.channels.cache.get(ID).send({ embeds: [embed] });
+    // Enter the ID of the logs channel at ID
 })
+```
+
+### New server vote event
+```js
+client.on("botVote", ({ userId, guildId, type }) => {
+    let embed = new Discord.EmbedBuilder()
+        .setTitle(`New server vote!!`)
+        .addFields([
+            {
+                name: 'User',
+                value: `<@!${userId}>`,
+                inline: true
+            },
+            {
+                name: 'Guild',
+                value: `<@!${guildId}>`,
+                inline: true
+            },
+            {
+                name: 'Type',
+                value: `${type}`,
+                inline: true
+            }
+        ])
+    client.channels.cache.get(ID).send({ embeds: [embed] });
+    // Enter the ID of the logs channel at ID
+})
+```
+
+### New server vote event
+```js
+client.on("botVote", ({ userId, guildId, type }) => {
+    let embed = new Discord.EmbedBuilder()
+        .setTitle(`New server vote!!`)
+        .addFields([
+            {
+                name: 'User',
+                value: `<@!${userId}>`,
+                inline: true
+            },
+            {
+                name: 'Guild',
+                value: `<@!${guildId}>`,
+                inline: true
+            },
+            {
+                name: 'Type',
+                value: `${type}`,
+                inline: true
+            }
+        ])
+    client.channels.cache.get(ID).send({ embeds: [embed] });
+    // Enter the ID of the logs channel at ID
+})
+```
+
+### Get votes
+```js
+client.getVotes()
+```
+
+### Get bot
+```js
+client.getBot(BOTID) // Replace BOTID with Discord bot id
+```
+
+### Get user
+```js
+client.getUser(USERID) // Replace USERID with Discord user id
 ```
 
 # 📑 License
