@@ -76,7 +76,7 @@ client.on("botVote", ({ userId, botId, isWeekend, type }) => {
 
 ### New server vote event
 ```js
-client.on("botVote", ({ userId, guildId, type }) => {
+client.on("serverVote", ({ userId, guildId, type }) => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`New server vote!!`)
         .addFields([
