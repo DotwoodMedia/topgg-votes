@@ -74,7 +74,7 @@ export class VoteClient extends EventEmitter {
     const app = express();
 
     app.post(
-      '/dblwebhook',
+      this._webhookPath,
       webhook.listener((vote) => {
         if (vote.bot) {
           this.emit('botVote', {
