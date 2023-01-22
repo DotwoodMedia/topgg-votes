@@ -39,6 +39,7 @@ votesClient.hasVoted(interaction.user.id).then(voted => {
 const votesClient = new VoteClient()
     .setToken("TOKEN") // Your top.gg token
     .setPort(22565) // Your host port
+    .setWebhookPath("/dblwebhook") // Webhook path
     .setAuthorization("WEBHOOK") // Webhook password
 ```
 
