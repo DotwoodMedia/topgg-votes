@@ -8,6 +8,7 @@ export interface IVoteClientConfig {
   token?: string;
   port?: number;
   authorization?: string;
+  webhookPath?: string;
 }
 
 export interface BotVoteEvent {
@@ -32,6 +33,7 @@ export class VoteClient extends EventEmitter {
   private _authToken: string;
   private _port: number;
   private _authorization: string;
+  private _webhookPath: string;
   private _untypedOn = this.on;
   private _untypedEmit = this.emit;
   public on = <K extends keyof IVoteClientEvents>(event: K, listener: IVoteClientEvents[K]): this => this._untypedOn(event, listener)
@@ -42,6 +44,7 @@ export class VoteClient extends EventEmitter {
     this._authToken = config?.token || '';
     this._port = config?.port || 22565;
     this._authorization = config?.authorization || 'WEBHOOK';
+    this._webhookPath = config?.webhookPath || '/dblwebhook'
   }
 
   public setToken(token: string): this {
