@@ -44,7 +44,7 @@ export class VoteClient extends EventEmitter {
     this._authToken = config?.token || '';
     this._port = config?.port || 22565;
     this._authorization = config?.authorization || 'WEBHOOK';
-    this._webhookPath = config?.webhookPath || '/dblwebhook'
+    this._webhookPath = config?.webhookPath || '/dblwebhook';
   }
 
   public setToken(token: string): this {
@@ -59,6 +59,11 @@ export class VoteClient extends EventEmitter {
 
   public setAuthorization(authorization: string | null): this {
     this._authorization = authorization ?? 'WEBHOOK';
+    return this;
+  }
+
+  public setWebhookPath(webhookPath: string | null): this {
+    this._webhookPath = webhookPath ?? '/dblwebhook';
     return this;
   }
 
