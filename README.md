@@ -45,7 +45,7 @@ const votesClient = new VoteClient()
 
 ### New bot vote event
 ```js
-client.on("botVote", ({ userId, botId, isWeekend, type }) => {
+votesClient.on("botVote", ({ userId, botId, isWeekend, type }) => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`New bot vote!!`)
         .addFields([
@@ -77,34 +77,7 @@ client.on("botVote", ({ userId, botId, isWeekend, type }) => {
 
 ### New server vote event
 ```js
-client.on("serverVote", ({ userId, guildId, type }) => {
-    let embed = new Discord.EmbedBuilder()
-        .setTitle(`New server vote!!`)
-        .addFields([
-            {
-                name: 'User',
-                value: `<@!${userId}>`,
-                inline: true
-            },
-            {
-                name: 'Guild',
-                value: `<@!${guildId}>`,
-                inline: true
-            },
-            {
-                name: 'Type',
-                value: `${type}`,
-                inline: true
-            }
-        ])
-    client.channels.cache.get(ID).send({ embeds: [embed] });
-    // Enter the ID of the logs channel at ID
-})
-```
-
-### New server vote event
-```js
-client.on("botVote", ({ userId, guildId, type }) => {
+votesClient.on("serverVote", ({ userId, guildId, type }) => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`New server vote!!`)
         .addFields([
@@ -131,17 +104,17 @@ client.on("botVote", ({ userId, guildId, type }) => {
 
 ### Get votes
 ```js
-client.getVotes()
+votesClient.getVotes()
 ```
 
 ### Get bot
 ```js
-client.getBot(BOTID) // Replace BOTID with Discord bot id
+votesClient.getBot(BOTID) // Replace BOTID with Discord bot id
 ```
 
 ### Get user
 ```js
-client.getUser(USERID) // Replace USERID with Discord user id
+votesClient.getUser(USERID) // Replace USERID with Discord user id
 ```
 
 # 📑 License
