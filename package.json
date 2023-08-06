@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build --clean",
+    "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --ext .ts .",
     "prepare": "npm run build",
