@@ -1,50 +1,27 @@
-import * as express from 'express';
-import * as chalk from 'chalk';
-import { Webhook, Api } from '@top-gg/sdk';
+import { BotInfo, ShortUser, UserInfo, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
-import { BotInfo, ShortUser, UserInfo } from '@top-gg/sdk/dist/typings';
-
-export interface IVoteClientConfig {
-  token?: string;
-  port?: number;
-  authorization?: string;
-  webhookPath?: string;
-}
-
-export interface BotVoteEvent {
-  userId: string;
-  botId: string;
-  isWeekend?: boolean;
-  type: string;
-}
-
-export interface ServerVoteEvent {
-  userId: string;
-  guildId: string;
-  type: string;
-}
-
-export type IVoteClientEvents = {
-  botVote: ({ userId, botId, isWeekend, type }: BotVoteEvent) => void;
-  serverVote: ({ userId, guildId, type }: ServerVoteEvent) => void;
-}
+import type { VoteClientConfigOptions } from '~/types/Client/VoteClientConfigOptions';
+import { VoteWebhookManager } from './VoteWebhookManager';
 
 export class VoteClient extends EventEmitter {
   private _authToken: string;
-  private _port: number;
-  private _authorization: string;
-  private _webhookPath: string;
-  private _untypedOn = this.on;
-  private _untypedEmit = this.emit;
-  public on = <K extends keyof IVoteClientEvents>(event: K, listener: IVoteClientEvents[K]): this => this._untypedOn(event, listener)
-  public emit = <K extends keyof IVoteClientEvents>(event: K, ...args: Parameters<IVoteClientEvents[K]>): boolean => this._untypedEmit(event, ...args)
+  private _webhookOptions: VoteClientConfigOptions['webhook'];
 
-  constructor(config?: IVoteClientConfig) {
+  constructor(options?: VoteClientConfigOptions) {
     super();
-    this._authToken = config?.token || '';
-    this._port = config?.port || 22565;
-    this._authorization = config?.authorization || 'WEBHOOK';
-    this._webhookPath = config?.webhookPath || '/dblwebhook';
+    this._authToken = options?.token ?? '';
+    this._webhookOptions = options?.webhook;
+
+    if (!this._authToken || this._authToken === '') {
+      throw new Error('[Top.gg Votes] Missing token!');
+    }
+
+    if (this._webhookOptions) {
+      new VoteWebhookManager({
+        ...this._webhookOptions,
+        client: this,
+      }).startWebhookServer();
+    }
   }
 
   public setToken(token: string): this {
@@ -52,84 +29,46 @@ export class VoteClient extends EventEmitter {
     return this;
   }
 
-  public setPort(port: number | null): this {
-    this._port = port ?? 22565;
+  public setWebhookPath(path: string): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.path = path;
     return this;
   }
 
-  public setAuthorization(authorization: string | null): this {
-    this._authorization = authorization ?? 'WEBHOOK';
+  public setWebhookPort(port: number): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.port = port;
     return this;
   }
 
-  public setWebhookPath(webhookPath: string | null): this {
-    this._webhookPath = webhookPath ?? '/dblwebhook';
+  public setWebhookAuthorization(authorization: string): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.authorization = authorization;
     return this;
-  }
-
-  public postWebhook() {
-    if (!this._authorization) throw new Error('[Top.gg Votes] Missing authorization!');
-    if (!this._port) throw new Error('[Top.gg Votes] Missing server port!');
-    const webhook = new Webhook(this._authorization);
-    const app = express();
-
-    app.post(
-      this._webhookPath,
-      webhook.listener((vote) => {
-        if (vote.bot) {
-          this.emit('botVote', {
-            userId: vote.user,
-            botId: vote.bot,
-            isWeekend: vote.isWeekend,
-            type: vote.type,
-          });
-        }
-        if (vote.guild) {
-          this.emit('serverVote', {
-            userId: vote.user,
-            guildId: vote.guild,
-            type: vote.type,
-          });
-        }
-      }),
-    );
-
-    app.listen(this._port, () => {
-      console.log(
-        chalk.white(chalk.bold('[Top.gg Votes]')),
-        chalk.green(`Vote client is running on port ${this._port}`),
-      );
-    });
   }
 
   public async getVotes(): Promise<ShortUser[]> {
-    if (!this._authToken) throw new Error('[Top.gg Votes] Missing token!');
-    const API = new Api(this._authToken);
-    const votes = await API.getVotes();
-    return votes;
+    return await new Api(this._authToken).getVotes();
   }
 
   public async hasVoted(userId: string): Promise<boolean> {
-    if (!this._authToken) throw new Error('[Top.gg Votes] Missing token!');
     if (!userId) throw new Error('[Top.gg Votes] Missing user ID!');
-    const API = new Api(this._authToken);
-    const voted = await API.hasVoted(userId);
-    return voted;
+    return await new Api(this._authToken).hasVoted(userId);
   }
 
   public async getBot(botId: string): Promise<BotInfo> {
-    if (!this._authToken) throw new Error('[Top.gg Votes] Missing token!');
     if (!botId) throw new Error('[Top.gg Votes] Missing bot ID!');
-    const API = new Api(this._authToken);
-    const info = await API.getBot(botId);
-    return info;
+    return await new Api(this._authToken).getBot(botId);
   }
 
   public async getUser(userId: string): Promise<UserInfo> {
-    if (!this._authToken) throw new Error('[Top.gg Votes] Missing token!');
     if (!userId) throw new Error('[Top.gg Votes] Missing user ID!');
-    const API = new Api(this._authToken);
-    const info = await API.getUser(userId);
-    return info;
+    return await new Api(this._authToken).getUser(userId);
   }
 }

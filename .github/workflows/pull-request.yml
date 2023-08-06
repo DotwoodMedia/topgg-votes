@@ -1,0 +1,33 @@
+name: Build and publish test
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: corepack enable
+      - run: pnpm install
+      - run: pnpm build
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: corepack enable
+      - run: pnpm install
+      - run: pnpm version prerelease --preid=test-$(openssl rand -hex 6) --no-git-tag-version
+      - run: pnpm build
+      - run: pnpm publish --tag test
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

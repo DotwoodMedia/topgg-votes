@@ -1,4 +1,4 @@
 src
 tsconfig.json
-tslint.json
+.eslintrc.js
 .prettierrc

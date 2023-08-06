@@ -1,16 +1,18 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
+        "target": "ESNext",
+        "module": "CommonJS",
         "declaration": true,
-        "outDir": "./lib",
-        "strict": true
+        "outDir": "dist",
+        "baseUrl": "src",
+        "strict": true,
+        "paths": {
+            "~/*": [
+                "./*"
+            ]
+        }
     },
-    "include": [
-        "src"
-    ],
     "exclude": [
         "node_modules",
-        "**/__tests__/*"
     ]
 }
