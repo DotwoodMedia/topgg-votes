@@ -22,8 +22,8 @@ devDependencies:
     specifier: 3.0.1
     version: 3.0.1
   typescript:
-    specifier: ^4.9.3
-    version: 4.9.3
+    specifier: 5.1.6
+    version: 5.1.6
 
 packages:
 
@@ -561,9 +561,9 @@ packages:
       mime-types: 2.1.35
     dev: false
 
-  /typescript@4.9.3:
-    resolution: {integrity: sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==}
-    engines: {node: '>=4.2.0'}
+  /typescript@5.1.6:
+    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
+    engines: {node: '>=14.17'}
     hasBin: true
     dev: true
 
