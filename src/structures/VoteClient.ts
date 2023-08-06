@@ -29,8 +29,27 @@ export class VoteClient extends EventEmitter {
     return this;
   }
 
-  public setWebhook(options: Required<VoteClientConfigOptions['webhook']>): this {
-    this._webhookOptions = options;
+  public setWebhookPath(path: string): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.path = path;
+    return this;
+  }
+
+  public setWebhookPort(port: number): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.port = port;
+    return this;
+  }
+
+  public setWebhookAuthorization(authorization: string): this {
+    if (!this._webhookOptions) {
+      this._webhookOptions = {};
+    }
+    this._webhookOptions.authorization = authorization;
     return this;
   }
 
