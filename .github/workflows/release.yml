@@ -30,6 +30,6 @@ jobs:
       - run: pnpm install
       - run: pnpm version ${{ github.event.release.tag_name }} --no-git-tag-version
       - run: pnpm build
-      - run: pnpm publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

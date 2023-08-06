@@ -9,13 +9,19 @@ Easily trade all your votes with this super easy framework!
 1. Install module: `npm i topgg-votes`
 2. Put the following in your index.ts:
 ```js
-import { VoteClient } from 'topgg-votes'
+import { VoteClient, VoteClientEvents } from 'topgg-votes'
 
-const votesClient = new VoteClient()
-votesClient.postWebhook();
+const votesClient = new VoteClient({
+    token: "TOKEN",
+    webhook: {
+        port: 22565,
+        path: "/dblwebhook",
+        authorization: "WEBHOOK"
+    }
+})
 
 // Event for vote notifications
-votesClient.on("botVote", ({ userId }) => {
+votesClient.on(VoteClientEvents.BotVote, ({ userId }) => {
     console.log(`${userId} has voted!`)
 })
 ```
@@ -38,14 +44,14 @@ votesClient.hasVoted(interaction.user.id).then(voted => {
 ```js
 const votesClient = new VoteClient()
     .setToken("TOKEN") // Your top.gg token
-    .setPort(22565) // Your host port
+    .setWebhookPort(22565) // Your host port
     .setWebhookPath("/dblwebhook") // Webhook path
-    .setAuthorization("WEBHOOK") // Webhook password
+    .setWebhookAuthorization("DOTWOODJS") // Webhook password
 ```
 
 ### New bot vote event
 ```js
-votesClient.on("botVote", ({ userId, botId, isWeekend, type }) => {
+votesClient.on(VoteClientEvents.BotVote, ({ userId, botId, isWeekend, type }) => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`New bot vote!!`)
         .addFields([
@@ -77,7 +83,7 @@ votesClient.on("botVote", ({ userId, botId, isWeekend, type }) => {
 
 ### New server vote event
 ```js
-votesClient.on("serverVote", ({ userId, guildId, type }) => {
+votesClient.on(VoteClientEvents.ServerVote, ({ userId, guildId, type }) => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`New server vote!!`)
         .addFields([
