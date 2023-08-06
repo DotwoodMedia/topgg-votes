@@ -1,4 +1,4 @@
-import { VoteWebhookManagerOptions } from '~/types/VoteWebhookManagerOptions';
+import { VoteWebhookManagerOptions } from '~/types/Webhook/VoteWebhookManagerOptions';
 import { VoteClient } from './VoteClient';
 import { Webhook } from '@top-gg/sdk';
 import * as express from 'express';

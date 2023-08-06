@@ -1,4 +1,4 @@
-import { VoteClient } from '..';
+import { VoteClient } from '../..';
 
 export type VoteWebhookManagerOptions = {
   client: VoteClient;
