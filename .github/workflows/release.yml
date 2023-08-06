@@ -27,8 +27,8 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: corepack enable
-      - run: pnpm version ${{ github.event.release.tag_name }} --no-git-tag-version
       - run: pnpm install
+      - run: pnpm version ${{ github.event.release.tag_name }} --no-git-tag-version
       - run: pnpm build
       - run: pnpm publish
         env:
