@@ -1,18 +1,26 @@
 import { BotInfo, ShortUser, UserInfo, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
 import type { VoteClientConfigOptions } from '~/types/Client/VoteClientConfigOptions';
+import { VoteWebhookManager } from './VoteWebhookManager';
 
 export class VoteClient extends EventEmitter {
   private _authToken: string;
-  private _authorization: string;
+  private _webhookOptions: VoteClientConfigOptions['webhook'];
 
-  constructor(config?: VoteClientConfigOptions) {
+  constructor(options?: VoteClientConfigOptions) {
     super();
-    this._authToken = config?.token || '';
-    this._authorization = config?.authorization || 'WEBHOOK';
+    this._authToken = options?.token ?? '';
+    this._webhookOptions = options?.webhook;
 
-    if (!this._authToken) {
+    if (!this._authToken || this._authToken === '') {
       throw new Error('[Top.gg Votes] Missing token!');
+    }
+
+    if (this._webhookOptions) {
+      new VoteWebhookManager({
+        ...this._webhookOptions,
+        client: this,
+      }).startWebhookServer();
     }
   }
 
@@ -21,13 +29,9 @@ export class VoteClient extends EventEmitter {
     return this;
   }
 
-  public setAuthorization(authorization: string | null): this {
-    this._authorization = authorization ?? 'WEBHOOK';
+  public setWebhook(options: Required<VoteClientConfigOptions['webhook']>): this {
+    this._webhookOptions = options;
     return this;
-  }
-
-  public getAuthorization(): string {
-    return this._authorization;
   }
 
   public async getVotes(): Promise<ShortUser[]> {
