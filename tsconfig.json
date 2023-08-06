@@ -6,7 +6,12 @@
         "declarationMap": true,
         "outDir": "dist",
         "baseUrl": "src",
-        "strict": true
+        "strict": true,
+        "paths": {
+            "~/*": [
+                "./*"
+            ]
+        }
     },
     "exclude": [
         "node_modules",
