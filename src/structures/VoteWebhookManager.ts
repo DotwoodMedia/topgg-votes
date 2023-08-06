@@ -9,11 +9,13 @@ export class VoteWebhookManager {
   private _client: VoteClient;
   private _port: number;
   private _path: string;
+  private _authorization: string;
 
   constructor(options: VoteWebhookManagerOptions) {
     this._client = options.client;
     this._port = options.port ?? 22565;
     this._path = options?.path || '/dblwebhook';
+    this._authorization = options?.authorization || 'WEBHOOK';
   }
 
   public setPort(port: number | null): this {
@@ -27,7 +29,7 @@ export class VoteWebhookManager {
   }
 
   public startWebhookServer() {
-    const webhook = new Webhook(this._client.getAuthorization());
+    const webhook = new Webhook(this._authorization);
     const app = express();
 
     app.post(
