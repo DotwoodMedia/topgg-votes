@@ -28,6 +28,6 @@ jobs:
       - run: pnpm install
       - run: pnpm version prerelease --preid=test-$(openssl rand -hex 6) --no-git-tag-version
       - run: pnpm build
-      - run: pnpm publish --tag test
+      - run: npm publish --tag test
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
