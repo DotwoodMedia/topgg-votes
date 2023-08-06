@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+      - run: corepack enable
       - run: pnpm version prerelease --preid=test-$(openssl rand -hex 6) --no-git-tag-version
       - run: pnpm install
       - run: pnpm build
