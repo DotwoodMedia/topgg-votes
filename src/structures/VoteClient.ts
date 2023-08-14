@@ -1,7 +1,7 @@
 import { BotInfo, ShortUser, UserInfo, Api } from '@top-gg/sdk';
 import { EventEmitter } from 'events';
-import type { VoteClientConfigOptions } from '~/types/Client/VoteClientConfigOptions';
 import { VoteWebhookManager } from './VoteWebhookManager';
+import { VoteClientConfigOptions } from 'types';
 
 export class VoteClient extends EventEmitter {
   private _authToken: string;

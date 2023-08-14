@@ -1,9 +1,9 @@
-import { VoteWebhookManagerOptions } from '~/types/Webhook/VoteWebhookManagerOptions';
 import { VoteClient } from './VoteClient';
 import { Webhook } from '@top-gg/sdk';
 import * as express from 'express';
 import * as chalk from 'chalk';
-import { VoteClientEvents } from '~/util/VoteClientEvents';
+import { VoteWebhookManagerOptions } from 'types';
+import { VoteClientEvents } from '../util';
 
 export class VoteWebhookManager {
   private _client: VoteClient;
