@@ -5,12 +5,7 @@
         "declaration": true,
         "outDir": "dist",
         "baseUrl": "src",
-        "strict": true,
-        "paths": {
-            "~/*": [
-                "./*"
-            ]
-        }
+        "strict": true
     },
     "include": [
         "src/**/*.ts"
